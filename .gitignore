@@ -1,0 +1,68 @@
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.buildlog/
+.history
+.svn/
+.flutter-plugins
+.flutter-plugins-dependencies
+migrate_working_dir/
+.gen
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# The .vscode folder contains launch configuration and tasks you configure in
+# VS Code which you may wish to be included in version control, so this line
+# is commented out by default.
+#.vscode/
+settings.json
+
+# Flutter/Dart/Pub related
+**/doc/api/
+**/ios/Flutter/.last_build_id
+**/ios/Flutter/tmp.xcconfig
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+/build/
+
+# Symbolication related
+app.*.symbols
+
+# Obfuscation related
+app.*.map.json
+
+# Android Studio will place build artifacts here
+/android/app/debug
+/android/app/profile
+/android/app/release
+mapbox_access_token.xml
+
+# Flutter generated files
+*.g.dart
+*.gen.dart
+*.config.dart
+*.freezed.dart
+*.mocks.dart
+*.gr.dart
+
+# Used by dotenv library to load environment variables.
+.env
+.env.*
+.android.config
+.ios.config
+.envfile
+
+fastlane
+Gemfile.lock
+Gemfile
