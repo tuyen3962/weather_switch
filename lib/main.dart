@@ -1,9 +1,13 @@
-import 'package:weather_switch/animation/weather_animation.dart';
-import 'package:weather_switch/constant/app_color.dart';
-import 'package:weather_switch/constant/app_constant.dart';
-import 'package:weather_switch/constant/image.dart';
 import 'package:flutter/material.dart';
 import 'package:size_config/size_config.dart';
+import 'package:weather_switch/animation/weather_animation.dart';
+import 'package:weather_switch/constant/app_constant.dart';
+import 'package:weather_switch/constant/app_shadow.dart';
+import 'package:weather_switch/constant/app_theme.dart';
+import 'package:weather_switch/constant/image.dart';
+
+final appTheme = AppTheme();
+final navigatorKey = GlobalKey<NavigatorState>();
 
 void main() {
   runApp(LayoutBuilder(
@@ -21,12 +25,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(),
+    return ValueListenableBuilder(
+      valueListenable: appTheme.themeMode,
+      builder: (context, mode, child) => MaterialApp(
+          navigatorKey: navigatorKey,
+          darkTheme: appTheme.darkTheme,
+          theme: appTheme.lightTheme,
+          themeMode: mode,
+          home: const MyHomePage()),
     );
   }
 }
@@ -57,47 +63,41 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
           Center(
             child: AnimatedBuilder(
               animation: animation.animationController,
-              builder: (context, child) => GestureDetector(
-                onTap: animation.forward,
-                behavior: HitTestBehavior.opaque,
-                child: Container(
-                  width: 369.w,
-                  height: 145.h,
-                  decoration: BoxDecoration(
-                      color: animation.opacityDarkBackground.value == 1
-                          ? null
-                          : AppColor.blueColor,
+              builder: (context, child) {
+                final isMoveForward =
+                    animation.opacityDarkBackground.value == 1;
+                return GestureDetector(
+                  onTap: animation.forward,
+                  behavior: HitTestBehavior.opaque,
+                  child: Container(
+                    width: 369.w,
+                    height: 145.h,
+                    decoration: BoxDecoration(
+                        color: isMoveForward
+                            ? null
+                            : Theme.of(context).primaryColor,
+                        borderRadius: BorderRadius.circular(1000),
+                        boxShadow:
+                            isMoveForward ? [] : AppShadow.backgroundShadow),
+                    child: ClipRRect(
                       borderRadius: BorderRadius.circular(1000),
-                      boxShadow: animation.opacityDarkBackground.value == 1
-                          ? []
-                          : [
-                              BoxShadow(
-                                  color: Colors.black.withOpacity(0.25),
-                                  offset: const Offset(1, 5),
-                                  blurRadius: 9),
-                              BoxShadow(
-                                  color: Colors.black.withOpacity(0.25),
-                                  offset: const Offset(0, -1),
-                                  blurRadius: 12)
-                            ]),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(1000),
-                    child: Stack(
-                      clipBehavior: Clip.none,
-                      alignment: Alignment.centerLeft,
-                      children: [
-                        Positioned.fill(
-                            child: FadeTransition(
-                                opacity: animation.opacityDarkBackground,
-                                child: Image.asset(Images.darkBackground))),
-                        _buildCloudView(Images.cloud),
-                        _buildCloudView(Images.cloudBack),
-                        _buildCircleView(),
-                      ],
+                      child: Stack(
+                        clipBehavior: Clip.none,
+                        alignment: Alignment.centerLeft,
+                        children: [
+                          Positioned.fill(
+                              child: FadeTransition(
+                                  opacity: animation.opacityDarkBackground,
+                                  child: Image.asset(Images.darkBackground))),
+                          _buildCloudView(Images.cloud),
+                          _buildCloudView(Images.cloudBack),
+                          _buildCircleView(),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ),
+                );
+              },
             ),
           ),
         ]));
